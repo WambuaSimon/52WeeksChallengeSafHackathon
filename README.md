@@ -1,5 +1,9 @@
 # 52WeeksChallengeSafHackathon
 
+<a href="https://codecov.io/gh/WambuaSimon/52WeeksChallengeSafHackathon">
+  <img src="https://codecov.io/gh/WambuaSimon/52WeeksChallengeSafHackathon/branch/master/graph/badge.svg" />
+</a>
+
 Small and simple app that helps us project how much we would be able to save over a 52-
 week period. The app is written in Java. To set it up, clone the repo and open it on Android Studio.  Ensure that offline mode is off to allow 
 for the download of dependencies.
