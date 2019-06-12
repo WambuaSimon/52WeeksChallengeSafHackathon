@@ -1,7 +1,7 @@
 # 52WeeksChallengeSafHackathon
-<a href="https://codecov.io/github/rollup/rollup?branch=master">
-    <img src="https://codecov.io/github/rollup/rollup/coverage.svg?branch=master" alt="Coverage via Codecov" />
-  </a>
+
+https://codecov.io/gh/TechnionYP5777/project-name/branch/master/graph/badge.svg)(https://codecov.io/gh/TechnionYP5777/project-name
+
 Small and simple app that helps us project how much we would be able to save over a 52-
 week period. The app is written in Java. To set it up, clone the repo and open it on Android Studio.  Ensure that offline mode is off to allow 
 for the download of dependencies.
