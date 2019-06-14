@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,8 +14,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.wizag.a52weekssavingchallenge.R;
 import com.wizag.a52weekssavingchallenge.model.Amount;
 import com.wizag.a52weekssavingchallenge.model.Depo;
-import com.wizag.a52weekssavingchallenge.ui.adapter.AmountAdapter;
-import com.wizag.a52weekssavingchallenge.utils.EditTextValidator;
+import com.wizag.a52weekssavingchallenge.adapter.AmountAdapter;
+import com.wizag.a52weekssavingchallenge.utils.MinMaxFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Amount> amountList = new ArrayList<>();
     AmountAdapter amountAdapter;
-    List<Integer> amount;
+
     List<Depo> depoList;
     String starting_amount_txt;
     Disposable d2;
-    String current_week;
+    int depositValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
         setTitle("#52WeekChallenge");
         ButterKnife.bind(this);
 
-        amount = new ArrayList<Integer>();
+
         depoList = new ArrayList<>();
 
+        //*initializing adapter*/
         amountAdapter = new AmountAdapter(this, amountList, new AmountAdapter.AmountAdapterListener() {
             @Override
             public void cardOnClick(View v, int position) {
@@ -59,14 +60,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*setting up recyclerview*/
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(amountAdapter);
 
+        /*starting value to be between 0 to 50m*/
+        starting_amount.setFilters(new InputFilter[]{new MinMaxFilter("0", "50000000")});
+
 
         starting_amount_txt = starting_amount.getText().toString();
-      
+        if (starting_amount_txt.isEmpty()) {
+            starting_amount.setText("0");
+        }
+
+        /*implementing rxBinding to starting amount EditText*/
         d2 = RxTextView.textChanges(starting_amount)
 //                .filter(s -> s.toString().length() > 6)
 //                .debounce(300, TimeUnit.MILLISECONDS)
@@ -76,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
                     public void accept(CharSequence charSequence) throws Exception {
                         amountList.clear();
 
-                        for (int i = 1; i <= 52; i++) {
+                        /*creating 52 weeks*/
+                        for (int i = 0; i <= 52; i++) {
                             Amount amount = new Amount();
+                            Depo depo = new Depo();
                             amount.setWeek(i);
 
 
@@ -97,20 +108,25 @@ public class MainActivity extends AppCompatActivity {
                                 amount.setTotal("0");
                             }
 
+
+
                             if (i == 1) {
                                 amount.setTotal(String.valueOf(result));
 
 
-                            }
+                            } else if(i!=1){
 
-                            if (i != 1) {
-                                int depo = Integer.parseInt(amount.getDeposit());
 
-                                int factor = depo * 2;
-                                int total = factor + depo;
+                                /*get Total*/
+//                                int deposit = Integer.parseInt(amount.getDeposit());
+                                int week = amount.getWeek();
+
+
+//                                int factor = deposit * 2;
+                                int total = (result * week) + result;
                                 amount.setTotal(String.valueOf(total));
-                            }
 
+                            }
                             amountList.add(amount);
 
 
@@ -121,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
 
     }
 

@@ -1,4 +1,4 @@
-package com.wizag.a52weekssavingchallenge.ui.adapter;
+package com.wizag.a52weekssavingchallenge.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
